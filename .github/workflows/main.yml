@@ -1,4 +1,4 @@
-name: Daily Recipe Delivery
+name: Daily Emailer
 
 on:
   schedule:
