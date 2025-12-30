@@ -212,7 +212,7 @@ def deliver():
                 else:
                     message.set_content(f"Here's your recipe:\n\n{email['body']}\n\n\n\n\n\n\n\nSent using Culinary Capsule")
                     message.add_alternative(html_customized_recipe_card, subtype='html')
-                
+
                 if email["sender_name"] == None:
                     message["Subject"] = f"New Recipe from a Cookbook: {email['title']}"
                     message["From"] = f"Cookbook Capsule <{gmail}>"
@@ -224,15 +224,18 @@ def deliver():
                 supabase.table("recipes").update({"is_sent": True}).eq("id", email['id']).execute()
 
             except Exception as e:
-                fail_message = EmailMessage()
-                fail_message["Subject"] = f"Sorry, your recipe didn't send!"
-                fail_message["To"] = email["sender_email"]
-                fail_message["From"] = f"Culinary Capsule <{gmail}>"
-                if email["sender_name"] == None:
-                    fail_message.set_content(f"""Hi,\n\nUnfortunately there was an error sending your recipe and it could not be delivered. Please try again, but make sure that the recipient's email address is still active and correct!\n\nSorry for the error,\nCulinary Capsule\n\n\nRecipe Details:\nName of Recipe: {email['title']}\nInstructions: {email['body']}\nTo: {email['sender_name']} (Email: {email['sendto_email']})\n\nTechnical Error Details:\n{e}""")
-                else:
-                    fail_message.set_content(f"""Hi {email["sender_name"]},\n\nUnfortunately there was an error sending your recipe and it could not be delivered. Please try again, but make sure that the recipient's email address is still active and correct!\n\nSorry for the error,\nCulinary Capsule\n\n\nRecipe Details:\nName of Recipe: {email['title']}\nInstructions: {email['body']}\nTo: {email['sender_name']} (Email: {email['sendto_email']})\n\nTechnical Error Details:\n{e}""")
-                smtp.send_message(fail_message)
+                try:
+                    fail_message = EmailMessage()
+                    fail_message["Subject"] = f"Sorry, your recipe didn't send!"
+                    fail_message["To"] = email["sender_email"]
+                    fail_message["From"] = f"Culinary Capsule <{gmail}>"
+                    if email["sender_name"] == None:
+                        fail_message.set_content(f"""Hi,\n\nUnfortunately there was an error sending your recipe and it could not be delivered. Please try again, but make sure that the recipient's email address is still active and correct!\n\nSorry for the error,\nCulinary Capsule\n\n\nRecipe Details:\nName of Recipe: {email['title']}\nInstructions: {email['body']}\nTo: {email['sender_name']} (Email: {email['sendto_email']})\n\nTechnical Error Details:\n{e}""")
+                    else:
+                        fail_message.set_content(f"""Hi {email["sender_name"]},\n\nUnfortunately there was an error sending your recipe and it could not be delivered. Please try again, but make sure that the recipient's email address is still active and correct!\n\nSorry for the error,\nCulinary Capsule\n\n\nRecipe Details:\nName of Recipe: {email['title']}\nInstructions: {email['body']}\nTo: {email['sender_name']} (Email: {email['sendto_email']})\n\nTechnical Error Details:\n{e}""")
+                    smtp.send_message(fail_message)
+                except Exception as e:
+                    print(f"Could not send fail message, will keep going. {e}")
 
     except Exception as e:
         raise e
