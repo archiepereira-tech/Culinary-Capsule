@@ -26,17 +26,17 @@
               <form id="recipe-form">
                 <div class="mb-3">
                   <label class="form-label">Name of Recipe</label>
-                  <input type="text" class="form-control" id="recipe-title" placeholder="Ex. Chocolate Chip Cookies" required>
+                  <input type="text" class="form-control" id="recipe-title" placeholder="Ex. Chocolate Chip Cookies" aria-label="Name of Recipe" required>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Instructions</label>
-                  <textarea class="form-control" id="recipe-body" rows="4" placeholder="Include what ingredients, time required, step-by-step instructions, etc." required></textarea>
+                  <textarea class="form-control" id="recipe-body" rows="4" aria-label="Instructions" placeholder="Include what ingredients, time required, step-by-step instructions, etc." required></textarea>
                 </div>
                 <hr>
                 <div class="row">
                   <div class="col">
                     <label class="form-label">Your Name</label>
-                    <input type="text" class="form-control" id="sender-name" placeholder="Your name" aria-label="Your Name">
+                    <input type="text" class="form-control" id="sender-name" aria-label="Your Name">
                   </div>
                   <div class="col">
                     <label class="form-label">Your Email</label>
@@ -46,11 +46,11 @@
                 <hr>
                 <div class="mb-3">
                   <label class="form-label">Recipient Email Address</label>
-                  <input type="email" class="form-control" id="sendto-email" required>
+                  <input type="email" class="form-control" id="sendto-email" placeholder="email@example.com" aria-label="Recipient Email Address" required>
                 </div>
                 <div class="mb-3">
                   <label class="form-label">When do you want this recipe to be sent?</label>
-                  <input type="date" class="form-control" id="tosend-date" required>
+                  <input type="date" class="form-control" id="tosend-date" aria-label="Choose Send Date" required>
                 </div>
               </form>
             </div>
