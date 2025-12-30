@@ -32,22 +32,24 @@
                   <label class="form-label">Instructions</label>
                   <textarea class="form-control" id="recipe-body" rows="4" placeholder="Include what ingredients, time required, step-by-step instructions, etc." required></textarea>
                 </div>
-                <br>
+                <hr>
                 <div class="row">
                   <div class="col">
-                    <input type="text" class="form-control" id="sender-name" placeholder="First name" aria-label="Your Name">
+                    <label class="form-label">Your Name</label>
+                    <input type="text" class="form-control" id="sender-name" placeholder="Your name" aria-label="Your Name">
                   </div>
                   <div class="col">
+                    <label class="form-label">Your Email</label>
                     <input type="text" class="form-control" id="sender-email" placeholder="email@example.com" aria-label="Your Email">
                   </div>
                 </div>
-                <br>
+                <hr>
                 <div class="mb-3">
-                  <label class="form-label">Send To (Email Address)</label>
+                  <label class="form-label">Recipient Email Address</label>
                   <input type="email" class="form-control" id="sendto-email" required>
                 </div>
                 <div class="mb-3">
-                  <label class="form-label">Delivery Date</label>
+                  <label class="form-label">When do you want this recipe to be sent?</label>
                   <input type="date" class="form-control" id="tosend-date" required>
                 </div>
               </form>
