@@ -199,14 +199,19 @@ def deliver():
         smtp.login(gmail, password)
     
         for email in emails_to_send:
-
             try:
+                htmlready_body = email['body'].replace('\n', '<br>')
+                if email["title"] == None:
+                    html_customized_recipe_card = html_recipe_card
+                else:
+                    html_customized_recipe_card = html_recipe_card.replace("Recipe Title", email['title'])
+                html_customized_recipe_card = html_customized_recipe_card.replace("Instructions", htmlready_body)
                 message = EmailMessage()
                 if email["body"] == None:
                     message.set_content(f"Sorry, no recipe was found. This may have been an accident!\n\n\n\n\n\n\n\nSent using Culinary Capsule")
                 else:
                     message.set_content(f"Here's your recipe:\n\n{email['body']}\n\n\n\n\n\n\n\nSent using Culinary Capsule")
-                    message.add_alternative(html_recipe_card, subtype='html')
+                    message.add_alternative(html_customized_recipe_card, subtype='html')
                 
                 if email["sender_name"] == None:
                     message["Subject"] = f"New Recipe from a Cookbook: {email['title']}"
