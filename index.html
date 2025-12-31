@@ -67,23 +67,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        const supabaseUrl = 'https://your-project-url.supabase.co'
-        const supabaseKey = 'your-anon-public-key'
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey)
+        const supabaseURL = "https://bfndmbdcfaaxshazecwh.supabase.co"
+        const supabaseKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmbmRtYmRjZmFheHNoYXplY3doIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwMzA1NDYsImV4cCI6MjA4MjYwNjU0Nn0.-prxP8_x8WfYP1eAW2jSznzvPcc7v2r3tcMRQ1RqTws"
+        const _supabase = supabase.createClient(supabaseURL, supabaseKEY)
     
         const recipeForm = document.getElementById('recipe-form');
         const submitBtn = document.getElementById('submit-button');
         const statusMsg = document.getElementById('status-message');
-    
-        // 3. Handle the form submission
+      
         recipeForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevents the page from reloading
+            event.preventDefault();
     
-            // Change button look to show it's working
+            // Spinner
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
     
-            // 4. Collect the data from your HTML IDs
             const recipeData = {
                 title: document.getElementById('recipe-title').value,
                 body: document.getElementById('recipe-body').value,
@@ -94,23 +92,20 @@
                 is_sent: false
             };
     
-            // 5. Push to Supabase
+            // Add to Supabase
             const { error } = await _supabase
                 .from('recipes')
                 .insert([recipeData]);
-    
+
             if (error) {
-                // Show error message if it fails
                 statusMsg.innerHTML = `<div class="alert alert-danger mt-3">Error: ${error.message}</div>`;
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Send";
             } else {
-                // 6. SUCCESS: This is the "Sent!" stuff you wanted
-                statusMsg.innerHTML = `<div class="alert alert-success mt-3">✅ Recipe Sent! It's safely in the capsule.</div>`;
+                statusMsg.innerHTML = `<div class="alert alert-success mt-3">Recipe Sent!</div>`;
                 submitBtn.innerText = "Sent!";
                 submitBtn.classList.replace('btn-primary', 'btn-success');
     
-                // Optional: Close the modal and reset everything after 2 seconds
                 setTimeout(() => {
                     recipeForm.reset();
                     statusMsg.innerHTML = "";
@@ -118,7 +113,6 @@
                     submitBtn.innerText = "Send";
                     submitBtn.classList.replace('btn-success', 'btn-primary');
                     
-                    // Use Bootstrap's way to close the modal
                     const modalElement = document.getElementById('staticBackdrop');
                     const modal = bootstrap.Modal.getInstance(modalElement);
                     modal.hide();
