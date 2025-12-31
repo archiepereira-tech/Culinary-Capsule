@@ -56,7 +56,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" id="submit-button" class="btn btn-primary">Send</button>
+              <button type="submit" form="recipe-form" id="submit-button" class="btn btn-primary">Send</button>
             </div>
           </div>
         </div>
@@ -64,5 +64,67 @@
     </figure>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        const supabaseUrl = 'https://your-project-url.supabase.co'
+        const supabaseKey = 'your-anon-public-key'
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey)
+    
+        const recipeForm = document.getElementById('recipe-form');
+        const submitBtn = document.getElementById('submit-button');
+        const statusMsg = document.getElementById('status-message');
+    
+        // 3. Handle the form submission
+        recipeForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevents the page from reloading
+    
+            // Change button look to show it's working
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
+    
+            // 4. Collect the data from your HTML IDs
+            const recipeData = {
+                title: document.getElementById('recipe-title').value,
+                body: document.getElementById('recipe-body').value,
+                sender_name: document.getElementById('sender-name').value,
+                sender_email: document.getElementById('sender-email').value,
+                sendto_email: document.getElementById('sendto-email').value,
+                tosend_date: document.getElementById('tosend-date').value,
+                is_sent: false
+            };
+    
+            // 5. Push to Supabase
+            const { error } = await _supabase
+                .from('recipes')
+                .insert([recipeData]);
+    
+            if (error) {
+                // Show error message if it fails
+                statusMsg.innerHTML = `<div class="alert alert-danger mt-3">Error: ${error.message}</div>`;
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Send";
+            } else {
+                // 6. SUCCESS: This is the "Sent!" stuff you wanted
+                statusMsg.innerHTML = `<div class="alert alert-success mt-3">✅ Recipe Sent! It's safely in the capsule.</div>`;
+                submitBtn.innerText = "Sent!";
+                submitBtn.classList.replace('btn-primary', 'btn-success');
+    
+                // Optional: Close the modal and reset everything after 2 seconds
+                setTimeout(() => {
+                    recipeForm.reset();
+                    statusMsg.innerHTML = "";
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Send";
+                    submitBtn.classList.replace('btn-success', 'btn-primary');
+                    
+                    // Use Bootstrap's way to close the modal
+                    const modalElement = document.getElementById('staticBackdrop');
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    modal.hide();
+                }, 2500);
+            }
+        });
+    </script>
   </body>
 </html>
